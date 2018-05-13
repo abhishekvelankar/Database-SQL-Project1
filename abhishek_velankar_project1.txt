@@ -1,0 +1,494 @@
+Name: Abhishek Velankar
+
+
+
+
+
+SQL> start q1
+SQL> select pid,name from products
+  2  where discnt_rate > 0.1 and (qoh-10)>=qoh_threshold
+  3  /
+
+PID  NAME                                                                       
+---- ---------------                                                            
+p003 camera                                                                     
+p007 tablet                                                                     
+
+SQL> start q2
+SQL> select name ,telephone#
+  2  from customers
+  3  where telephone# like '666%'
+  4  and to_char(last_visit_date,'YYYY')=2017
+  5  and to_char(last_visit_date,'MM')=10
+  6  /
+
+NAME            TELEPHONE#                                                      
+--------------- ------------                                                    
+Kathy           666-555-4567                                                    
+Joe             666-555-5746                                                    
+
+SQL> start q3
+SQL> select c.name,c.telephone#
+  2  from customers c join purchases p on c.cid=p.cid
+  3  where to_char(ptime,'MM')=10
+  4  and to_char(ptime,'YYYY')=2017
+  5  and total_price >= 100
+  6  /
+
+NAME            TELEPHONE#                                                      
+--------------- ------------                                                    
+Kathy           666-555-4567                                                    
+Mike            999-555-5674                                                    
+Joe             666-555-5746                                                    
+
+SQL> start q4
+SQL> select p.pid,p.name
+  2  from products p join purchases s
+  3  on p.pid=s.pid
+  4  where original_price*(1-discnt_rate)<10
+  5  and to_char(ptime,'YYYY')=2017
+  6  and ( to_char(ptime,'MM')=9
+  7  or to_char(ptime,'MM')= 8)
+  8  /
+
+PID  NAME                                                                       
+---- ---------------                                                            
+p005 chair                                                                      
+
+SQL> start q5
+SQL> select p.pur#,p.eid,p.pid,p.cid,p.qty,p.ptime,p.total_price
+  2  from purchases p
+  3  join customers c on p.cid=c.cid
+  4  join employees e on p.eid=e.eid
+  5  join products s on p.pid=s.pid
+  6  where c.name like 'K%'
+  7  and e.telephone# like '888%'
+  8  and s.original_price < 15
+  9  /
+
+      PUR# EID PID  CID         QTY PTIME     TOTAL_PRICE                       
+---------- --- ---- ---- ---------- --------- -----------                       
+    100009 e03 p001 c007          1 12-OCT-17        8.99                       
+
+SQL> start q6
+SQL> select p.pur#,s.name as
+  2  product_name,to_char(p.ptime,'Month/DD/YYYY day HH:MI:SS
+  3  ')as ptime,p.total_price,s.original_price*p.qty-p.total_price
+  4  as
+  5  saving
+  6  from purchases p
+  7  join products s on p.pid = s.pid
+  8  /
+
+      PUR# PRODUCT_NAME                                                         
+---------- ---------------                                                      
+PTIME                                                                           
+--------------------------------------------------------------------------------
+TOTAL_PRICE     SAVING                                                          
+----------- ----------                                                          
+    100009 stapler                                                              
+October  /12/2017 thursday  02:44:23                                            
+       8.99          1                                                          
+                                                                                
+    100001 TV                                                                   
+August   /12/2017 saturday  10:34:30                                            
+     211.65      37.35                                                          
+
+      PUR# PRODUCT_NAME                                                         
+---------- ---------------                                                      
+PTIME                                                                           
+--------------------------------------------------------------------------------
+TOTAL_PRICE     SAVING                                                          
+----------- ----------                                                          
+                                                                                
+    100010 TV                                                                   
+September/19/2017 tuesday   05:32:37                                            
+     211.65      37.35                                                          
+                                                                                
+    100002 camera                                                               
+September/20/2017 wednesday 11:23:36                                            
+
+      PUR# PRODUCT_NAME                                                         
+---------- ---------------                                                      
+PTIME                                                                           
+--------------------------------------------------------------------------------
+TOTAL_PRICE     SAVING                                                          
+----------- ----------                                                          
+      118.4       29.6                                                          
+                                                                                
+    100003 pencil                                                               
+October  /08/2017 sunday    09:30:50                                            
+       4.95          0                                                          
+                                                                                
+    100011 pencil                                                               
+
+      PUR# PRODUCT_NAME                                                         
+---------- ---------------                                                      
+PTIME                                                                           
+--------------------------------------------------------------------------------
+TOTAL_PRICE     SAVING                                                          
+----------- ----------                                                          
+October  /16/2017 monday    04:54:40                                            
+        9.9          0                                                          
+                                                                                
+    100004 chair                                                                
+August   /23/2017 wednesday 04:23:35                                            
+      18.17       7.79                                                          
+                                                                                
+
+      PUR# PRODUCT_NAME                                                         
+---------- ---------------                                                      
+PTIME                                                                           
+--------------------------------------------------------------------------------
+TOTAL_PRICE     SAVING                                                          
+----------- ----------                                                          
+    100008 lamp                                                                 
+August   /16/2017 wednesday 12:22:15                                            
+      17.96       1.99                                                          
+                                                                                
+    100007 lamp                                                                 
+September/10/2017 sunday    05:12:20                                            
+      35.91       3.99                                                          
+
+      PUR# PRODUCT_NAME                                                         
+---------- ---------------                                                      
+PTIME                                                                           
+--------------------------------------------------------------------------------
+TOTAL_PRICE     SAVING                                                          
+----------- ----------                                                          
+                                                                                
+    100013 lamp                                                                 
+August   /30/2017 wednesday 10:38:25                                            
+      35.91       3.99                                                          
+                                                                                
+    100005 tablet                                                               
+October  /15/2017 sunday    01:38:55                                            
+
+      PUR# PRODUCT_NAME                                                         
+---------- ---------------                                                      
+PTIME                                                                           
+--------------------------------------------------------------------------------
+TOTAL_PRICE     SAVING                                                          
+----------- ----------                                                          
+      119.2       29.8                                                          
+                                                                                
+    100012 computer                                                             
+September/18/2017 monday    03:56:38                                            
+      698.6      299.4                                                          
+                                                                                
+    100006 computer                                                             
+
+      PUR# PRODUCT_NAME                                                         
+---------- ---------------                                                      
+PTIME                                                                           
+--------------------------------------------------------------------------------
+TOTAL_PRICE     SAVING                                                          
+----------- ----------                                                          
+October  /12/2017 thursday  03:22:10                                            
+      349.3      149.7                                                          
+                                                                                
+    100014 powerbank                                                            
+October  /14/2017 saturday  10:54:06                                            
+     134.84      15.01                                                          
+                                                                                
+
+14 rows selected.
+
+SQL> start q7
+SQL> select distinct e.eid
+  2  from employees e
+  3  join customers c on
+  4  substr(e.telephone#,1,3)=substr(c.telephone#,1,3)
+  5  order by e.eid asc
+  6  /
+
+EID                                                                             
+---                                                                             
+e01                                                                             
+e02                                                                             
+e03                                                                             
+e04                                                                             
+
+SQL> start q8
+SQL> select c.name
+  2  from customers c
+  3  join purchases p on c.cid=p.cid
+  4  where c.visits_made>=2
+  5  and p.total_price/p.qty<=100
+  6  and to_char(c.last_visit_date,'DD')=to_char(p.ptime,'DD')
+  7  and to_char(c.last_visit_date,'MM')=to_char(p.ptime,'MM')
+  8  and to_char(c.last_visit_date,'YYYY')=to_char(p.ptime,'YYYY')
+  9  /
+
+NAME                                                                            
+---------------                                                                 
+Connie                                                                          
+Mike                                                                            
+
+SQL> start q91
+SQL> select name
+  2  from employees
+  3  where eid not in (select p.eid
+  4  from purchases p
+  5  join products s on p.pid=s.pid
+  6  where s.original_price > 200)
+  7  /
+
+NAME                                                                            
+---------------                                                                 
+Mike                                                                            
+
+SQL> start q92
+SQL> select name,eid from employees a
+  2  where NOT EXISTS(
+  3  select eid
+  4  from purchases p
+  5  join products s on p.pid=s.pid
+  6  where s.original_price>=200
+  7  and p.eid=a.eid
+  8  )
+  9  /
+
+NAME            EID                                                             
+--------------- ---                                                             
+Mike            e05                                                             
+
+SQL> start q10
+SQL> 
+SQL> select distinct p.cid,c.name
+  2  from purchases p
+  3  join customers c on p.cid=c.cid
+  4  where p.pid in (select pid
+  5  from purchases
+  6  where cid = 'c005')
+  7  /
+
+CID  NAME                                                                       
+---- ---------------                                                            
+c003 Chris                                                                      
+c005 Mike                                                                       
+
+SQL> start q11
+SQL> select cid from
+  2  (
+  3  select c.cid
+  4  from purchases p
+  5  join customers c on p.cid=c.cid
+  6  join products s on p.pid=s.pid
+  7  where to_char(c.last_visit_date,'MM')=10
+  8  and to_char(c.last_visit_date,'YYYY')=2017
+  9  and s.pid in (
+ 10  select pid
+ 11  from products
+ 12  where original_price>200)
+ 13  )
+ 14  group by cid
+ 15  having count(*)>=(
+ 16  select count(original_price)
+ 17   from products where
+ 18  original_price>200
+ 19  )
+ 20  /
+
+CID                                                                             
+----                                                                            
+c001                                                                            
+
+SQL> start q12
+SQL> select p.eid,e.name
+  2  from purchases p
+  3  join employees e on p.eid=e.eid
+  4  where cid in
+  5  (
+  6  select cid
+  7  from purchases
+  8  where pid in(
+  9  select pid
+ 10  from products
+ 11  where name = 'camera'
+ 12  or name = 'chair'
+ 13  )
+ 14  )
+ 15  group by p.eid,e.name
+ 16  having count(p.eid)>=2
+ 17  /
+
+EID NAME                                                                        
+--- ---------------                                                             
+e01 David                                                                       
+e03 Susan                                                                       
+
+SQL> start q13
+SQL> select c.name
+  2  from purchases p
+  3  join customers c on p.cid=c.cid
+  4  where total_price = (select MAX(total_price) from purchases)
+  5  and p.qty>=1
+  6  /
+
+NAME                                                                            
+---------------                                                                 
+Chris                                                                           
+
+SQL> start q14
+SQL> 
+SQL> 
+SQL> select pid,name,original_price-original_price*(1-discnt_rate) as discount_amount
+  2  from products
+  3  where original_price-original_price*(1-discnt_rate) =(
+  4  select max(discount_amount)
+  5  from (
+  6  select pid,name,original_price-original_price*(1-discnt_rate) as discount_amount
+  7  from products
+  8  )
+  9  )
+ 10  
+SQL> /
+
+PID  NAME            DISCOUNT_AMOUNT                                            
+---- --------------- ---------------                                            
+p008 computer                  149.7                                            
+
+SQL> start q15
+SQL> select to_char(ptime,'YYYY/MM')as Month,sum(total_price) as Total_Sale
+  2  from purchases
+  3  group by to_char(ptime,'YYYY/MM')
+  4  /
+
+MONTH   TOTAL_SALE                                                              
+------- ----------                                                              
+2017/08     283.69                                                              
+2017/09    1064.56                                                              
+2017/10     627.18                                                              
+
+SQL> start q16
+SQL> 
+SQL> select s.name,p.pid,sum(p.qty) as total_quantity_sold
+  2  from purchases p
+  3  join products s on p.pid=s.pid
+  4  group by p.pid,s.name
+  5  having sum(qty)=(
+  6  select max(total_quantity_sold)
+  7  from (
+  8  select p.pid,sum(p.qty) as total_quantity_sold
+  9  from purchases p
+ 10  join products s on p.pid=s.pid
+ 11  group by p.pid
+ 12  )
+ 13  )
+ 14  
+SQL> 
+SQL> /
+
+NAME            PID  TOTAL_QUANTITY_SOLD                                        
+--------------- ---- -------------------                                        
+pencil          p004                  15                                        
+
+SQL> start q17
+SQL> select p.pur#,s.original_price*p.qty-total_price as saving
+  2  from purchases p
+  3  join products s on p.pid=s.pid
+  4  where s.original_price*p.qty-total_price =
+  5  (
+  6  select max(saving)
+  7  from (select p.pur#,s.original_price*p.qty-total_price as saving
+  8  from purchases p
+  9  join products s on p.pid=s.pid
+ 10  )
+ 11  )
+ 12  /
+
+      PUR#     SAVING                                                           
+---------- ----------                                                           
+    100012      299.4                                                           
+
+SQL> start q18
+SQL> select pur#
+  2  from purchases
+  3  where total_price>=(
+  4  select max(total_price)
+  5  from purchases
+  6  where cid = 'c006'
+  7  )
+  8  /
+
+      PUR#                                                                      
+----------                                                                      
+    100001                                                                      
+    100006                                                                      
+    100010                                                                      
+    100012                                                                      
+
+SQL> start q182
+SQL> 
+SQL> select pur#
+  2  from purchases
+  3  where total_price>=(
+  4  select total_price
+  5  from purchases
+  6  where cid = 'c006'
+  7  and ROWNUM <=1
+  8  )
+  9  
+SQL> /
+
+      PUR#                                                                      
+----------                                                                      
+    100001                                                                      
+    100006                                                                      
+    100010                                                                      
+    100012                                                                      
+
+SQL> start q19
+SQL> select name,cid,total_amount_spent
+  2  from
+  3  (
+  4  select name,cid,total_amount_spent
+  5  from(
+  6  select c.name,p.cid,sum(p.total_price) as total_amount_spent
+  7  from purchases p
+  8  join customers c on p.cid=c.cid
+  9  group by p.cid,c.name
+ 10  )
+ 11  order by total_amount_spent desc
+ 12  )
+ 13  where ROWNUM<=3
+ 14  /
+
+NAME            CID  TOTAL_AMOUNT_SPENT                                         
+--------------- ---- ------------------                                         
+Chris           c003             752.68                                         
+Kathy           c001             679.35                                         
+Connie          c006             221.55                                         
+
+SQL> start q20
+SQL> 
+SQL> select r.pid,r.name,nvl(a.number_of_customers,0) as number_of_customers
+  2  from
+  3  (
+  4  select p.pid,s.name,count(p.pid) as number_of_customers
+  5  from purchases p
+  6  right outer join products s on p.pid=s.pid
+  7  where to_char(ptime,'MM')=10
+  8  and to_char(ptime,'YYYY')=2017
+  9  group by p.pid,s.name
+ 10  ) a
+ 11  right outer join products r on a.pid=r.pid
+ 12  
+SQL> /
+
+PID  NAME            NUMBER_OF_CUSTOMERS                                        
+---- --------------- -------------------                                        
+p001 stapler                           1                                        
+p002 TV                                0                                        
+p003 camera                            0                                        
+p004 pencil                            2                                        
+p005 chair                             0                                        
+p006 lamp                              0                                        
+p007 tablet                            1                                        
+p008 computer                          1                                        
+p009 powerbank                         1                                        
+
+9 rows selected.
+
+SQL> spool off
